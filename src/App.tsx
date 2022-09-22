@@ -3,7 +3,8 @@ import {
   makeTDecEncrypter,
   Enrico,
   MessageKit,
-  tDecDecrypter
+  tDecDecrypter,
+  PolicyMessageKit
 } from "@nucypher/nucypher-ts";
 import React, { useEffect, useState } from "react";
 import { useEthers } from "@usedapp/core";
