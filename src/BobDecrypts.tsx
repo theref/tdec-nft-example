@@ -19,16 +19,28 @@ export const BobDecrypts = ({ decrypt, decryptedMessage, enabled }: Props) => {
     decrypt(MessageKit.fromBytes(b64decoded));
   };
 
+  const DecryptedMessage = () => {
+    if(!decryptedMessage) {
+      return <></>
+    }
+    return (
+      <>
+        <h3>Decrypted Message:</h3>
+        <p>{decryptedMessage}</p>
+      </>
+    )
+  }
+
   return (
     <div>
-      <h3>Step 3 - Bob decrypts encrypted message</h3>
+      <h2>Step 3 - Decrypt Encrypted Message</h2>
       <input
         value={ciphertext}
         placeholder="Enter encrypted message"
         onChange={(e) => setCiphertext(e.currentTarget.value)}
       />
       <button onClick={onDecrypt}>Decrypt</button>
-      {decryptedMessage ?? ""}
+      {DecryptedMessage()}
     </div>
   );
 };

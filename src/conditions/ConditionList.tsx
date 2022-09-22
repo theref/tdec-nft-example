@@ -34,6 +34,7 @@ export const ConditionList = ({
 
   const ConditionList = conditions ? (
     <div>
+      <h3>Condition JSON Preview</h3>
       <pre>
         {conditions.conditions.map((condition, index) => (
           <div key={index}>{Condition(condition)}</div>
@@ -48,7 +49,7 @@ export const ConditionList = ({
 
   return (
     <>
-      <h2>Policy Conditions</h2>
+      <h2>Step 1 - Create A Condition Based Policy</h2>
       <div>
         <ConditionBuilder
           addConditions={addConditions}

@@ -108,7 +108,7 @@ export const ConditionBuilder = ({ addConditions, enableOperator }: Props) => {
 
   const TimelockCondition = (
     <div style={{ display: "grid" }}>
-      <h2>Timelock Condition</h2>
+      <h3>Timelock Condition</h3>
       <p>
         Return Value Test {ComparatorDropdown} Value {ReturnValueTestInput}{" "}
       </p>
@@ -121,7 +121,7 @@ export const ConditionBuilder = ({ addConditions, enableOperator }: Props) => {
   );
   const RpcCondition = (
     <div>
-      <h2>RPC Method Condition</h2>
+      <h3>RPC Method Condition</h3>
       <p>Method {RpcMethodDropdown}</p>
       <p>
         Parameters {ContractMethodParametersDropdown} Value{" "}
@@ -140,7 +140,7 @@ export const ConditionBuilder = ({ addConditions, enableOperator }: Props) => {
   );
   const EvmCondition = (
     <div>
-      <h2>EVM Condition</h2>
+      <h3>EVM Condition</h3>
       <p>Contract Address {ContractAddressInput}</p>
       <p>Standard Contract Type {StandardContractTypeDropdown}</p>
       <p>Method {ContractMethodDropdown}</p>
@@ -243,27 +243,23 @@ export const ConditionBuilder = ({ addConditions, enableOperator }: Props) => {
     <form>
       {enableOperator && (
         <>
-          <h2>Select Logical Operator</h2>
+          <h3>Select Logical Operator</h3>
           {LogicalOperatorDropdown}
-          <br />
         </>
       )}
 
       {/* <div style={{ display: 'grid' }}>
-        <h2>Select Prebuilt Condition</h2>
+        <h3>Select Prebuilt Condition</h3>
         {PrebuiltConditionDropdown}
-        <br />
 
         <Button onClick={onAddPrebuiltCondition}>Add Prebuilt</Button>
       </div> */}
 
-      <div style={{ display: "grid" }}>
-        <h2>Build New Condition</h2>
+      <div>
+        <h3>Build New Condition</h3>
         {ConditionTypeDropdown}
-        <br />
 
         {ComponentForConditionType(conditionType)}
-        <br />
 
         <button onClick={onAddNewCondition}>Add New</button>
       </div>
