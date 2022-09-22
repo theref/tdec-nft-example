@@ -78,7 +78,21 @@ export default function App() {
       conditionContext
     );
 
-    setDecryptedMessage(new TextDecoder().decode(retrievedMessage[0]));
+    // This is lifted straight out of `nucypher-ts`
+    retrievedMessage.forEach((mk: PolicyMessageKit) => {
+      if (!mk.isDecryptableByReceiver()) {
+        const errorMsg = `Not enough cFrags retrieved to open capsule ${mk.capsule}.`
+        if (Object.values(mk.errors).length > 0) {
+          const ursulasWithErrors = Object.entries(mk.errors).map(([address, error]) => `${address} - ${error}`)
+          alert(`${errorMsg} Some Ursulas have failed with errors:\n${ursulasWithErrors.join('\n')}`)
+        } else {
+          alert(errorMsg)
+        }
+      }
+    })
+    const decryptedMessage = decrypter.decrypt(retrievedMessage[0])
+
+    setDecryptedMessage(new TextDecoder().decode(decryptedMessage))
   };
 
   if(!account) {
