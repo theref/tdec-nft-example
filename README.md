@@ -1,4 +1,4 @@
-# `nucypher/tdec-sandbox`
+# `nucypher/tdec-nft-example`
 
 This repository contains a simple and easy to use example of condition threshold decryption.
 
