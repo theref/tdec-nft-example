@@ -27,20 +27,6 @@ export const NftConditionBuilder = ({
   );
   const [tokenId, setTokenId] = useState("");
 
-  const makeDropdown = (
-    items: readonly string[],
-    onChange = (e: any) => console.log(e)
-  ) => {
-    const optionItems = items.map((elem, index) => (
-      <option key={index} value={elem}>
-        {elem}
-      </option>
-    ));
-    return (
-      <select onChange={(e) => onChange(e.target.value)}>{optionItems}</select>
-    );
-  };
-
   const makeInput = (
     type: "text" | "number",
     onChange = (e: any) => console.log(e),
@@ -84,11 +70,11 @@ export const NftConditionBuilder = ({
   };
 
   const ConditionList =
-    conditions?.conditions.length > 0 ? (
+    conditions && conditions?.conditions.length > 0 ? (
       <div>
         <h3>Condition JSON Preview</h3>
         <pre>
-          {conditions.conditions.map((condition, index) => (
+          {conditions?.conditions.map((condition, index) => (
             <div key={index}>
               {JSON.stringify((condition as Condition).value, null, 2)}
             </div>

@@ -8,11 +8,7 @@ interface Props {
   encrypt: (value: string) => void;
 }
 
-export const EnricoEncrypts = ({
-  encrypt,
-  encryptedMessage,
-  enabled,
-}: Props) => {
+export const Encrypt = ({ encrypt, encryptedMessage, enabled }: Props) => {
   if (!enabled) {
     return <></>;
   }

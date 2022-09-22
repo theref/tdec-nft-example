@@ -7,7 +7,7 @@ interface Props {
   decryptedMessage: string;
 }
 
-export const BobDecrypts = ({ decrypt, decryptedMessage, enabled }: Props) => {
+export const Decrypt = ({ decrypt, decryptedMessage, enabled }: Props) => {
   const [ciphertext, setCiphertext] = useState("");
 
   if (!enabled) {

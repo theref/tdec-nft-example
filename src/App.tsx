@@ -12,8 +12,8 @@ import { useEthers } from "@usedapp/core";
 import { ethers } from "ethers";
 
 import { NftConditionBuilder } from "./NftConditionBuilder";
-import { EnricoEncrypts } from "./EnricoEncrypts";
-import { BobDecrypts } from "./BobDecrypts";
+import { Encrypt } from "./Encrypt";
+import { Decrypt } from "./Decrypt";
 
 declare let window: any;
 
@@ -140,12 +140,12 @@ export default function App() {
 
       {conditions.conditions.length > 0 && (
         <>
-          <EnricoEncrypts
+          <Encrypt
             enabled={encryptionEnabled}
             encrypt={encryptMessage}
             encryptedMessage={encryptedMessage}
           />
-          <BobDecrypts
+          <Decrypt
             enabled={decryptionEnabled}
             decrypt={decryptMessage}
             decryptedMessage={decryptedMessage}
