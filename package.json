@@ -1,5 +1,5 @@
 {
-  "name": "nucypher-ts-example-react-webpack",
+  "name": "tdec-sandbox",
   "version": "0.1.0",
   "description": "A usage example for nucypher-ts",
   "private": true,
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nucypher/nucypher-ts": "^0.7.9-alpha.12",
+    "@usedapp/core": "^1.1.5",
     "buffer": "^6.0.3",
     "ethers": "^5.7.1",
     "file-loader": "^6.2.0",
