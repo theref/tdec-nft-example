@@ -123,7 +123,13 @@ export default function App() {
         <h2>Web3 Provider</h2>
         <button onClick={deactivate}> Disconnect Wallet </button>
         {account && <p>Account: {account}</p>}
-          <p>Access <a href={'https://wesleytw.github.io/epic-nft-dist/'} target="_blank">the NFT Faucet</a> if needed</p>
+        <p>
+          Access{" "}
+          <a href={"https://wesleytw.github.io/epic-nft-dist/"} target="_blank">
+            the NFT Faucet
+          </a>{" "}
+          if needed
+        </p>
       </div>
 
       <NftConditionBuilder
@@ -132,7 +138,7 @@ export default function App() {
         setConditions={setConditions}
       />
 
-      {conditions && (
+      {conditions.conditions.length > 0 && (
         <>
           <EnricoEncrypts
             enabled={encryptionEnabled}

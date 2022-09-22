@@ -20,14 +20,11 @@ export const NftConditionBuilder = ({
     return <></>;
   }
 
-  const NFT_CONTRACT_TYPES = ["ERC721", "ERC1155"];
-  const { METHODS_PER_CONTRACT_TYPE } = Conditions.EvmCondition;
-
-  const [nftContractType, setNftContractType] = useState(NFT_CONTRACT_TYPES[0]);
-  const [contractMethod, setContractMethod] = useState(
-    METHODS_PER_CONTRACT_TYPE[nftContractType][0]
+  const SQUARE_NFT_RINKEBY_ADDRESS =
+    "0x18df9f6c606B2C4400D69Eeed2684cd1Aa501b8D";
+  const [contractAddress, setContractAddress] = useState(
+    SQUARE_NFT_RINKEBY_ADDRESS
   );
-  const [contractAddress, setContractAddress] = useState("");
   const [tokenId, setTokenId] = useState("");
 
   const makeDropdown = (
@@ -43,25 +40,24 @@ export const NftConditionBuilder = ({
       <select onChange={(e) => onChange(e.target.value)}>{optionItems}</select>
     );
   };
-  const onSetContractMethod = (method: string) => {
-    setContractMethod(method);
-  };
-
-  const NftContractTypeDropdown = makeDropdown(
-    NFT_CONTRACT_TYPES,
-    setNftContractType
-  );
-  const ContractMethodDropdown = makeDropdown(
-    METHODS_PER_CONTRACT_TYPE[nftContractType],
-    onSetContractMethod
-  );
 
   const makeInput = (
     type: "text" | "number",
-    onChange = (e: any) => console.log(e)
-  ) => <input type={type} onChange={(e: any) => onChange(e.target.value)} />;
+    onChange = (e: any) => console.log(e),
+    defaultValue?: string | number
+  ) => (
+    <input
+      type={type}
+      onChange={(e: any) => onChange(e.target.value)}
+      defaultValue={defaultValue}
+    />
+  );
 
-  const ContractAddressInput = makeInput("text", setContractAddress);
+  const ContractAddressInput = makeInput(
+    "text",
+    setContractAddress,
+    SQUARE_NFT_RINKEBY_ADDRESS
+  );
   const TokenIdInput = makeInput("number", setTokenId);
 
   const makeEvmCondition = (): Condition => {
@@ -72,8 +68,8 @@ export const NftConditionBuilder = ({
     return new Conditions.EvmCondition({
       contractAddress,
       chain,
-      standardContractType: nftContractType,
-      method: contractMethod,
+      standardContractType: "ERC721",
+      method: "ownerOf",
       parameters: [tokenId],
       returnValueTest: {
         comparator: "==",
@@ -87,31 +83,30 @@ export const NftConditionBuilder = ({
     setConditions(new ConditionSet([makeEvmCondition()]));
   };
 
-  const ConditionList = conditions ? (
-    <div>
-      <h3>Condition JSON Preview</h3>
-      <pre>
-        {conditions.conditions.map((condition, index) => (
-          <div key={index}>
-            {JSON.stringify((condition as Condition).value, null, 2)}
-          </div>
-        ))}
-      </pre>
-    </div>
-  ) : (
-    <></>
-  );
+  const ConditionList =
+    conditions?.conditions.length > 0 ? (
+      <div>
+        <h3>Condition JSON Preview</h3>
+        <pre>
+          {conditions.conditions.map((condition, index) => (
+            <div key={index}>
+              {JSON.stringify((condition as Condition).value, null, 2)}
+            </div>
+          ))}
+        </pre>
+      </div>
+    ) : (
+      <></>
+    );
 
   return (
     <>
-      <h2>Step 1 - Create A Condition Based Policy</h2>
+      <h2>Step 1 - Create A Conditioned Access Policy</h2>
       <div>
         <div>
-          <h3>Create An NFT-Condition</h3>
+          <h3>Customize your NFT-Condition</h3>
           <div>
-            <p>Contract Address {ContractAddressInput}</p>
-            <p>NFT Contract Type {NftContractTypeDropdown}</p>
-            <p>Method {ContractMethodDropdown}</p>
+            <p>ERC721 Contract Address {ContractAddressInput}</p>
             <p>TokenId {TokenIdInput}</p>
           </div>
           <button onClick={onCreateCondition}>Create</button>
