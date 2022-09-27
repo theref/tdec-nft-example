@@ -1,6 +1,5 @@
 import { ConditionSet, Condition, Conditions } from "@nucypher/nucypher-ts";
 import React, { useState } from "react";
-
 import { useEthers } from "@usedapp/core";
 
 interface Props {
@@ -28,40 +27,52 @@ export const NftConditionBuilder = ({
   const [tokenId, setTokenId] = useState("");
 
   const makeInput = (
-    type: "text" | "number",
     onChange = (e: any) => console.log(e),
     defaultValue?: string | number
   ) => (
     <input
-      type={type}
+      type="string"
       onChange={(e: any) => onChange(e.target.value)}
       defaultValue={defaultValue}
     />
   );
 
   const ContractAddressInput = makeInput(
-    "text",
     setContractAddress,
     SQUARE_NFT_RINKEBY_ADDRESS
   );
-  const TokenIdInput = makeInput("number", setTokenId);
+  const TokenIdInput = makeInput(setTokenId);
 
   const makeEvmCondition = (): Condition => {
     // TODO: Capitalizing is required
     const capitalizeFirstLetter = (s: string) =>
       s.charAt(0).toUpperCase() + s.slice(1);
     const chain = capitalizeFirstLetter(library.network.name);
+    if (tokenId) {
+      return new Conditions.EvmCondition({
+        contractAddress,
+        chain,
+        standardContractType: "ERC721",
+        method: "ownerOf",
+        parameters: [parseInt(tokenId, 10)],
+        returnValueTest: {
+          comparator: "==",
+          value: ":userAddress",
+        },
+      });
+    }
     return new Conditions.EvmCondition({
       contractAddress,
       chain,
       standardContractType: "ERC721",
-      method: "ownerOf",
-      parameters: [tokenId],
+      method: "balanceOf",
+      parameters: [":userAddress"],
       returnValueTest: {
-        comparator: "==",
-        value: ":userAddress",
+        comparator: ">",
+        value: "0",
       },
     });
+
   };
 
   const onCreateCondition = (e: any) => {
@@ -93,7 +104,7 @@ export const NftConditionBuilder = ({
           <h3>Customize your NFT-Condition</h3>
           <div>
             <p>ERC721 Contract Address {ContractAddressInput}</p>
-            <p>TokenId {TokenIdInput}</p>
+            <p>(Optional) TokenId {TokenIdInput}</p>
           </div>
           <button onClick={onCreateCondition}>Create</button>
         </div>
