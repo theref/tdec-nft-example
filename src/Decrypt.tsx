@@ -8,7 +8,12 @@ interface Props {
   decryptionErrors: string[];
 }
 
-export const Decrypt = ({ decrypt, decryptedMessage, decryptionErrors, enabled }: Props) => {
+export const Decrypt = ({
+  decrypt,
+  decryptedMessage,
+  decryptionErrors,
+  enabled,
+}: Props) => {
   const [ciphertext, setCiphertext] = useState("");
 
   if (!enabled) {
@@ -34,7 +39,7 @@ export const Decrypt = ({ decrypt, decryptedMessage, decryptionErrors, enabled }
 
   const DecryptionErrors = () => {
     if (decryptionErrors.length === 0) {
-      return null
+      return null;
     }
 
     return (
@@ -48,8 +53,8 @@ export const Decrypt = ({ decrypt, decryptedMessage, decryptionErrors, enabled }
           ))}
         </ul>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div>

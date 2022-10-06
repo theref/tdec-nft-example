@@ -14,17 +14,16 @@ export const NftConditionBuilder = ({
   enabled,
 }: Props) => {
   const { library } = useEthers();
-
-  if (!enabled || !library) {
-    return <></>;
-  }
-
   const SQUARE_NFT_RINKEBY_ADDRESS =
     "0x18df9f6c606B2C4400D69Eeed2684cd1Aa501b8D";
   const [contractAddress, setContractAddress] = useState(
     SQUARE_NFT_RINKEBY_ADDRESS
   );
   const [tokenId, setTokenId] = useState("");
+
+  if (!enabled || !library) {
+    return <></>;
+  }
 
   const makeInput = (
     onChange = (e: any) => console.log(e),
@@ -72,7 +71,6 @@ export const NftConditionBuilder = ({
         value: "0",
       },
     });
-
   };
 
   const onCreateCondition = (e: any) => {

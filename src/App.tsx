@@ -37,7 +37,7 @@ export default function App() {
   // Decrypt message vars
   const [decryptionEnabled, setDecryptionEnabled] = useState(false);
   const [decryptedMessage, setDecryptedMessage] = useState("");
-  const [decryptionErrors, setDecryptionErrors] = useState([] as string[])
+  const [decryptionErrors, setDecryptionErrors] = useState([] as string[]);
 
   useEffect(() => {
     const porterUri = "https://porter-ibex.nucypher.community";
@@ -66,8 +66,8 @@ export default function App() {
   };
 
   const decryptMessage = async (ciphertext: MessageKit) => {
-    setDecryptedMessage('')
-    setDecryptionErrors([])
+    setDecryptedMessage("");
+    setDecryptionErrors([]);
 
     if (!decrypter || !conditions || !library) {
       return;
@@ -83,23 +83,28 @@ export default function App() {
     // );
 
     // More extensive flow with manual error handling
-    const retrievedMessages = await decrypter.retrieve([ciphertext], conditionContext)
+    const retrievedMessages = await decrypter.retrieve(
+      [ciphertext],
+      conditionContext
+    );
     const decryptedMessages = retrievedMessages.map((mk: PolicyMessageKit) => {
       if (mk.isDecryptableByReceiver()) {
-        return decrypter.decrypt(mk)
+        return decrypter.decrypt(mk);
       }
 
       // If we are unable to decrypt, we may inspect the errors and handle them
       if (Object.values(mk.errors).length > 0) {
-        const ursulasWithErrors: string[] = Object.entries(mk.errors).map(([address, error]) => `${address} - ${error}`)
-        setDecryptionErrors(ursulasWithErrors)
+        const ursulasWithErrors: string[] = Object.entries(mk.errors).map(
+          ([address, error]) => `${address} - ${error}`
+        );
+        setDecryptionErrors(ursulasWithErrors);
       } else {
-        setDecryptionErrors([])
+        setDecryptionErrors([]);
       }
-      return new Uint8Array()
-    })
+      return new Uint8Array();
+    });
 
-    setDecryptedMessage(new TextDecoder().decode(decryptedMessages[0]))
+    setDecryptedMessage(new TextDecoder().decode(decryptedMessages[0]));
   };
 
   if (!account) {
