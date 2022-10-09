@@ -1,13 +1,14 @@
 import {
-  makeTDecDecrypter,
-  makeTDecEncrypter,
+  Cohort,
+  DeployedStrategy,
   Enrico,
   MessageKit,
+  Strategy,
   tDecDecrypter,
   PolicyMessageKit,
   ConditionSet,
 } from "@nucypher/nucypher-ts";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useEthers } from "@usedapp/core";
 import { ethers } from "ethers";
 
@@ -20,13 +21,38 @@ declare let window: any;
 export default function App() {
   const { activateBrowserWallet, deactivate, account, library } = useEthers();
 
+  const [shares, setShares] = useState(1);
+  const [threshold, setThreshold] = useState(1);
+
+  const [strategy, setStrategy] = useState(undefined as Strategy | undefined)
+  const [deployedStrategy, setDeployedStrategy] = useState(undefined as DeployedStrategy | undefined)
+
   // tDec Entities
   const [encrypter, setEncrypter] = useState(undefined as Enrico | undefined);
-  const [decrypter, setDecrypter] = useState(
-    undefined as tDecDecrypter | undefined
-  );
+  const [decrypter, setDecrypter] = useState(undefined as tDecDecrypter | undefined);
 
   const [conditions, setConditions] = useState(new ConditionSet([]));
+
+  async function deployStrategy () {
+    console.log(threshold, shares);
+    const cohortConfig = {
+      threshold,
+      shares,
+      porterUri: "http://143.198.239.218"
+    };
+
+    const goodUrsulas = ['0xCe692F6fA86319Af43050fB7F09FDC43319F7612'];
+    const cohort = await Cohort.create(cohortConfig, goodUrsulas);
+    setStrategy(Strategy.create(
+      cohort,
+      new Date(),
+      new Date(Date.now() + 1000 * 60 * 60 * 24 * 30))
+      );
+
+    setDeployedStrategy(await strategy?.deploy('test', new ethers.providers.Web3Provider(window.ethereum)));
+    setEncrypter(deployedStrategy?.encrypter);
+    setDecrypter(deployedStrategy?.decrypter);
+  };
 
   // Encrypt message vars
   const [encryptionEnabled, setEncryptionEnabled] = useState(true);
@@ -39,20 +65,17 @@ export default function App() {
   const [decryptedMessage, setDecryptedMessage] = useState("");
   const [decryptionErrors, setDecryptionErrors] = useState([] as string[]);
 
-  useEffect(() => {
-    const porterUri = "https://porter-ibex.nucypher.community";
-    // Uncomment to use a local Porter
-    // const porterUri = "http://127.0.0.1:80";
-    const configLabel = "2-of-4-ibex";
+  // useEffect(() => {
+  //   const porterUri = "https://porter-ibex.nucypher.community";
 
-    const make = async () => {
-      const decrypter = await makeTDecDecrypter(configLabel, porterUri);
-      const encrypter = await makeTDecEncrypter(configLabel);
-      setDecrypter(decrypter);
-      setEncrypter(encrypter);
-    };
-    make().catch(console.error);
-  }, []);
+  //   const make = async () => {
+  //     // const decrypter = await makeTDecDecrypter(configLabel, porterUri);
+  //     // const encrypter = await makeTDecEncrypter(configLabel);
+  //     setDecrypter(decrypter);
+  //     setEncrypter(encrypter);
+  //   };
+  //   make().catch(console.error);
+  // }, []);
 
   const encryptMessage = (plaintext: string) => {
     if (!encrypter || !conditions) {
@@ -76,11 +99,6 @@ export default function App() {
     const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
     const conditionContext = conditions.buildContext(web3Provider);
 
-    // Simplified flow with automated error handling
-    // const decryptedMessages = await decrypter.retrieveAndDecrypt(
-    //   [ciphertext],
-    //   conditionContext
-    // );
 
     // More extensive flow with manual error handling
     const retrievedMessages = await decrypter.retrieve(
@@ -130,6 +148,29 @@ export default function App() {
           if needed
         </p>
       </div>
+
+      <div>
+        <h2>Build Strategy</h2>
+        <label htmlFor="thresholds">Select Threshold:</label>
+        <select id="selectThreshold" onChange={(e) => setThreshold(parseInt(e.currentTarget.value))}>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+
+        <label htmlFor="shares">Select Shares:</label>
+        <select id="selectShare" onChange={(e) => setShares(parseInt(e.currentTarget.value))}>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+
+      <button onClick={deployStrategy}>Deploy Strategy</button>
 
       <NftConditionBuilder
         enabled={encryptionEnabled}

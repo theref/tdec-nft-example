@@ -104,7 +104,7 @@ export const NftConditionBuilder = ({
             <p>ERC721 Contract Address {ContractAddressInput}</p>
             <p>(Optional) TokenId {TokenIdInput}</p>
           </div>
-          <button onClick={onCreateCondition}>Create</button>
+          <button onClick={onCreateCondition}>Create Conditions</button>
         </div>
         {ConditionList}
       </div>
