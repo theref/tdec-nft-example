@@ -85,7 +85,7 @@ export const NftConditionBuilder = ({
         <pre>
           {conditions?.conditions.map((condition, index) => (
             <div key={index}>
-              {JSON.stringify((condition as Condition).value, null, 2)}
+              {JSON.stringify((condition as Condition).toObj(), null, 2)}
             </div>
           ))}
         </pre>

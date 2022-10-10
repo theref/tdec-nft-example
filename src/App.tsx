@@ -25,28 +25,32 @@ export default function App() {
   const [shares, setShares] = useState(1);
   const [threshold, setThreshold] = useState(1);
 
-  const [strategy, setStrategy] = useState(undefined as Strategy | undefined)
-  const [deployedStrategy, setDeployedStrategy] = useState(undefined as DeployedStrategy | undefined)
+  const [strategy, setStrategy] = useState(undefined as Strategy | undefined);
+  const [deployedStrategy, setDeployedStrategy] = useState(
+    undefined as DeployedStrategy | undefined
+  );
 
   // tDec Entities
   const [encrypter, setEncrypter] = useState(undefined as Enrico | undefined);
-  const [decrypter, setDecrypter] = useState(undefined as tDecDecrypter | undefined);
+  const [decrypter, setDecrypter] = useState(
+    undefined as tDecDecrypter | undefined
+  );
 
   const [conditions, setConditions] = useState(new ConditionSet([]));
 
-  async function deployStrategy () {
-    await switchToNetwork(Mumbai.chainId)
-    const web3Provider = new ethers.providers.Web3Provider(window.ethereum)
+  async function deployStrategy() {
+    await switchToNetwork(Mumbai.chainId);
+    const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
 
     console.log(threshold, shares);
     const cohortConfig = {
       threshold,
       shares,
-      porterUri: "http://143.198.239.218"
+      porterUri: "http://143.198.239.218",
     };
 
-    const goodUrsulas = ['0xCe692F6fA86319Af43050fB7F09FDC43319F7612'];
-    const cohort = await Cohort.create(cohortConfig, goodUrsulas);
+    const goodUrsulas = ["0xCe692F6fA86319Af43050fB7F09FDC43319F7612"];
+    const cohort = await Cohort.create(cohortConfig, goodUrsulas as unknown[] as never[]); // TODO: remove after updating nucypher-ts
     console.log("Cohort created: ", cohort);
     const strategy = Strategy.create(
       cohort,
@@ -57,8 +61,7 @@ export default function App() {
 
     console.log("Strategy created: ", strategy);
 
-
-    const deployedStrategy = await strategy.deploy('test', web3Provider);
+    const deployedStrategy = await strategy.deploy("test", web3Provider);
     setDeployedStrategy(deployedStrategy);
 
     // setDeployedStrategy(await strategy?.deploy('test', new ethers.providers.Web3Provider(window.ethereum)));
@@ -113,7 +116,6 @@ export default function App() {
     const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
     const conditionContext = conditions.buildContext(web3Provider);
 
-
     // More extensive flow with manual error handling
     const retrievedMessages = await decrypter.retrieve(
       [ciphertext],
@@ -166,10 +168,20 @@ export default function App() {
       <div>
         <h2>Build Strategy</h2>
         <label htmlFor="thresholds">Select Threshold:</label>
-        <input id="thresholds" type="number" defaultValue={1} onChange={(e) => setThreshold(parseInt(e.currentTarget.value))}/>
+        <input
+          id="thresholds"
+          type="number"
+          defaultValue={1}
+          onChange={(e) => setThreshold(parseInt(e.currentTarget.value))}
+        />
 
         <label htmlFor="shares">Select Shares:</label>
-        <input id="shares" type="number" defaultValue={1} onChange={(e) => setShares(parseInt(e.currentTarget.value))}/>
+        <input
+          id="shares"
+          type="number"
+          defaultValue={1}
+          onChange={(e) => setShares(parseInt(e.currentTarget.value))}
+        />
       </div>
 
       <button onClick={deployStrategy}>Deploy Strategy</button>
