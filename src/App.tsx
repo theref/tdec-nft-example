@@ -166,22 +166,10 @@ export default function App() {
       <div>
         <h2>Build Strategy</h2>
         <label htmlFor="thresholds">Select Threshold:</label>
-        <select id="selectThreshold" onChange={(e) => setThreshold(parseInt(e.currentTarget.value))}>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
+        <input id="thresholds" type="number" defaultValue={1} onChange={(e) => setThreshold(parseInt(e.currentTarget.value))}/>
 
         <label htmlFor="shares">Select Shares:</label>
-        <select id="selectShare" onChange={(e) => setShares(parseInt(e.currentTarget.value))}>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
+        <input id="shares" type="number" defaultValue={1} onChange={(e) => setShares(parseInt(e.currentTarget.value))}/>
       </div>
 
       <button onClick={deployStrategy}>Deploy Strategy</button>

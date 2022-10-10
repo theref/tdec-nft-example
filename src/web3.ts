@@ -1,4 +1,4 @@
-import { Mumbai, Rinkeby } from "@usedapp/core";
+import { Rinkeby } from "@usedapp/core";
 import { ethers } from "ethers";
 
 export const WEB3_PROVIDER_URL =
