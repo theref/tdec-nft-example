@@ -43,15 +43,25 @@ export default function App() {
 
     const goodUrsulas = ['0xCe692F6fA86319Af43050fB7F09FDC43319F7612'];
     const cohort = await Cohort.create(cohortConfig, goodUrsulas);
-    setStrategy(Strategy.create(
+    console.log("Cohort created: ", cohort);
+    const strategy = Strategy.create(
       cohort,
       new Date(),
-      new Date(Date.now() + 1000 * 60 * 60 * 24 * 30))
-      );
+      new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+    );
+    setStrategy(strategy);
 
-    setDeployedStrategy(await strategy?.deploy('test', new ethers.providers.Web3Provider(window.ethereum)));
+    console.log("Strategy created: ", strategy);
+
+
+    const deployedStrategy = await strategy.deploy('test', new ethers.providers.Web3Provider(window.ethereum));
+    setDeployedStrategy(deployedStrategy);
+
+    // setDeployedStrategy(await strategy?.deploy('test', new ethers.providers.Web3Provider(window.ethereum)));
     setEncrypter(deployedStrategy?.encrypter);
     setDecrypter(deployedStrategy?.decrypter);
+
+    console.log("Deployed Strategy created: ", deployedStrategy);
   };
 
   // Encrypt message vars
