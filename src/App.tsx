@@ -9,12 +9,13 @@ import {
   ConditionSet,
 } from "@nucypher/nucypher-ts";
 import React, { useState } from "react";
-import { useEthers } from "@usedapp/core";
+import { Mumbai, useEthers } from "@usedapp/core";
 import { ethers } from "ethers";
 
 import { NftConditionBuilder } from "./NftConditionBuilder";
 import { Encrypt } from "./Encrypt";
 import { Decrypt } from "./Decrypt";
+import { switchToNetwork } from "./web3";
 
 declare let window: any;
 
@@ -34,6 +35,9 @@ export default function App() {
   const [conditions, setConditions] = useState(new ConditionSet([]));
 
   async function deployStrategy () {
+    await switchToNetwork(Mumbai.chainId)
+    const web3Provider = new ethers.providers.Web3Provider(window.ethereum)
+
     console.log(threshold, shares);
     const cohortConfig = {
       threshold,
@@ -54,7 +58,7 @@ export default function App() {
     console.log("Strategy created: ", strategy);
 
 
-    const deployedStrategy = await strategy.deploy('test', new ethers.providers.Web3Provider(window.ethereum));
+    const deployedStrategy = await strategy.deploy('test', web3Provider);
     setDeployedStrategy(deployedStrategy);
 
     // setDeployedStrategy(await strategy?.deploy('test', new ethers.providers.Web3Provider(window.ethereum)));
@@ -62,7 +66,7 @@ export default function App() {
     setDecrypter(deployedStrategy?.decrypter);
 
     console.log("Deployed Strategy created: ", deployedStrategy);
-  };
+  }
 
   // Encrypt message vars
   const [encryptionEnabled, setEncryptionEnabled] = useState(true);
@@ -129,7 +133,7 @@ export default function App() {
       } else {
         setDecryptionErrors([]);
       }
-      return new Uint8Array();
+      return new Uint8Array([]);
     });
 
     setDecryptedMessage(new TextDecoder().decode(decryptedMessages[0]));
@@ -188,7 +192,7 @@ export default function App() {
         setConditions={setConditions}
       />
 
-      {conditions.conditions.length > 0 && (
+      {conditions.conditions.length > 0 && encryptedMessage && (
         <>
           <Encrypt
             enabled={encryptionEnabled}
