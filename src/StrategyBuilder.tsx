@@ -35,9 +35,7 @@ export const StrategyBuilder = ({ setDeployedStrategy, setLoading }: Props) => {
 
     const cohort = await makeCohort();
     const strategy = Strategy.create(
-      cohort,
-      new Date(),
-      new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+      cohort
     );
     console.log("Created strategy: ", strategy);
 
